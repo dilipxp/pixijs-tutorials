@@ -1,35 +1,52 @@
-import { Application, Assets, Sprite } from "pixi.js";
+// Main file to load and switch between PixiJS examples
 
-(async () => {
-  // Create a new application
+import { Application } from 'pixi.js';
+
+( async ()=>{
+
   const app = new Application();
+  await app.init({backgroundColor:'seagreen', height:600, width:400});
+  document.getElementById('app')?.appendChild(app.canvas);  
 
-  // Initialize the application
-  await app.init({ background: "#1099bb", resizeTo: window });
+  const examples: any = {
+    basics: () => import('../examples/basic-setup/index')
+  }
 
-  // Append the application canvas to the document body
-  document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  // Load the bunny texture
-  const texture = await Assets.load("/assets/bunny.png");
+const exampleSelector = document.createElement('select');
+exampleSelector.innerHTML = `
+    <option value="">Select an Example</option>
+    <option value="basics">Basics</option>
+    <option value="container">Container</option>
+    <option value="spritesheet">Spritesheet</option>
+    <option value="interaction">Interaction</option>
+    <option value="filters">Filters</option>
+    <option value="text">Text</option>
+    <option value="graphics">Graphics</option>
+`;
 
-  // Create a bunny Sprite
-  const bunny = new Sprite(texture);
+document.body.appendChild(exampleSelector);
 
-  // Center the sprite's anchor point
-  bunny.anchor.set(0.5);
+exampleSelector.addEventListener('change', async function (){
+  const s :string = this.value;
+  console.log(this.value);
+  if (examples[s]) {
+          document.getElementById('app')?.innerHTML.cle
+          app.stage.removeChildren(); // Clear stage
+          const module = await examples[s]();
+          if (module.default) module.default(app); // Run the example
+      }
+  
+})
 
-  // Move the sprite to the center of the screen
-  bunny.position.set(app.screen.width / 2, app.screen.height / 2);
+// exampleSelector.addEventListener('change', async (event) => {
+//   const selectedExample = event.target.value;
+//   if (examples[selectedExample]) {
+//       app.stage.removeChildren(); // Clear stage
+//       const module = await examples[selectedExample]();
+//       if (module.default) module.default(app); // Run the example
+//   }
 
-  // Add the bunny to the stage
-  app.stage.addChild(bunny);
-
-  // Listen for animate update
-  app.ticker.add((time) => {
-    // Just for fun, let's rotate mr rabbit a little.
-    // * Delta is 1 if running at 100% performance *
-    // * Creates frame-independent transformation *
-    bunny.rotation += 0.1 * time.deltaTime;
-  });
 })();
+
+
