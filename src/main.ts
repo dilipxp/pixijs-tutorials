@@ -4,8 +4,8 @@ import { Application } from 'pixi.js';
 
 ( async ()=>{
 
-  const app = new Application();
-  await app.init({backgroundColor:'seagreen', height:600, width:400});
+  const app = createApp();
+  await app.init({backgroundColor:'seagreen', height:600, width:800});
   document.getElementById('app')?.appendChild(app.canvas);  
 
   const examples: any = {
@@ -31,7 +31,6 @@ exampleSelector.addEventListener('change', async function (){
   const s :string = this.value;
   console.log(this.value);
   if (examples[s]) {
-          document.getElementById('app')?.innerHTML.cle
           app.stage.removeChildren(); // Clear stage
           const module = await examples[s]();
           if (module.default) module.default(app); // Run the example
@@ -39,14 +38,12 @@ exampleSelector.addEventListener('change', async function (){
   
 })
 
-// exampleSelector.addEventListener('change', async (event) => {
-//   const selectedExample = event.target.value;
-//   if (examples[selectedExample]) {
-//       app.stage.removeChildren(); // Clear stage
-//       const module = await examples[selectedExample]();
-//       if (module.default) module.default(app); // Run the example
-//   }
 
 })();
+
+
+function createApp(): Application{
+  return new Application();
+}
 
 
