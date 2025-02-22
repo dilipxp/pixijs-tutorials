@@ -1,26 +1,24 @@
 // Using Containers in PixiJS
-
-import * as PIXI from 'pixi.js';
+import { Application,Assets,Container, Sprite, Texture } from "pixi.js";
 
 // Create a new PixiJS application
-const app = new PIXI.Application({
-    width: 800,
-    height: 600,
-    backgroundColor: 0x1099bb
-});
+const app = new Application();
+await app.init({backgroundColor:'seagreen', height:600, width:400});
 
-document.body.appendChild(app.view); // Add canvas to the document
+document.body.appendChild(app.canvas); // Add canvas to the document
 
 // Create a container to group objects
-const container = new PIXI.Container();
+const container = new Container();
 app.stage.addChild(container);
 
+const texture = await Assets.load('https://pixijs.com/assets/bunny.png')
+
 // Load a sprite texture
-const texture = PIXI.Texture.from('https://pixijs.com/assets/bunny.png');
+// const texture = Texture.from('https://pixijs.com/assets/bunny.png');
 
 // Create multiple sprites and add them to the container
 for (let i = 0; i < 5; i++) {
-    const sprite = new PIXI.Sprite(texture);
+    const sprite = new Sprite(texture);
     sprite.x = 100 + i * 150;
     sprite.y = 300;
     sprite.anchor.set(0.5);

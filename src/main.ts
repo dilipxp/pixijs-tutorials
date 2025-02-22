@@ -4,12 +4,13 @@ import { Application } from 'pixi.js';
 
 ( async ()=>{
 
-  const app = createApp();
-  await app.init({backgroundColor:'seagreen', height:600, width:800});
-  document.getElementById('app')?.appendChild(app.canvas);  
+  const defaultApp = createApp();
+  await defaultApp.init({backgroundColor:'seagreen', height:600, width:800});
+  document.getElementById('app')?.appendChild(defaultApp.canvas);  
 
   const examples: any = {
-    basics: () => import('../examples/basic-setup/index')
+    basics: () => import('../examples/basic-setup/index'),
+    container: () => import('../examples/container/index')
   }
 
 
@@ -31,9 +32,9 @@ exampleSelector.addEventListener('change', async function (){
   const s :string = this.value;
   console.log(this.value);
   if (examples[s]) {
-          app.stage.removeChildren(); // Clear stage
+          defaultApp.stage.removeChildren(); // Clear stage
           const module = await examples[s]();
-          if (module.default) module.default(app); // Run the example
+          if (module.default) module.default(defaultApp); // Run the example
       }
   
 })
@@ -45,5 +46,6 @@ exampleSelector.addEventListener('change', async function (){
 function createApp(): Application{
   return new Application();
 }
+
 
 
